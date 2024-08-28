@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">LibertyNote</string>
+    <string name="text_editor_title">Liberty Notes</string>
+    <string name="your_notes_title">Ma liste d\'outils</string>
+    <string name="close_button_text">Fermer</string>
+    <string name="edit_link_text">Modifier le lien</string>
+    <string name="copy_link_text">Copier le lien</string>
+    <string name="preview_for_text">Aperçu pour :</string>
 </resources>
