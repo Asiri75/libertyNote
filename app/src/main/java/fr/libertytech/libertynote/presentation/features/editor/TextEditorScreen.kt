@@ -71,6 +71,25 @@ fun TextEditorScreen() {
 }
 
 @Composable
+private fun NoteTitle(
+    noteTitle: String,
+    onTextChange: (String) -> Unit,
+) {
+    BasicTextField(
+        value = noteTitle,
+        onValueChange = onTextChange,
+        textStyle = TextStyle(
+            fontSize = MaterialTheme.typography.headlineMedium.fontSize, // Use a smaller size than headline
+            fontWeight = FontWeight.Bold, // Make the text bold
+            color = MaterialTheme.colorScheme.onBackground // Ensure the color adapts to the theme
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp) // Maintain padding from the original
+    )
+}
+
+@Composable
 fun ViewingMode(
     text: String,
     onLinkClick: (String) -> Unit,
@@ -86,7 +105,10 @@ fun ViewingMode(
                     onLinkClick(it.item)
                 } ?: onTextClick(offset)
         },
-        style = TextStyle(fontSize = 18.sp),
+        style = TextStyle(
+            fontSize = 18.sp,
+            color = MaterialTheme.colorScheme.onBackground // Text color adapts to theme
+        ),
         modifier = Modifier.fillMaxSize()
     )
 }
@@ -133,7 +155,10 @@ fun EditingMode(
         modifier = Modifier
             .fillMaxWidth()
             .focusRequester(focusRequester), // Attach the FocusRequester
-        textStyle = TextStyle(fontSize = 18.sp),
+        textStyle = TextStyle(
+            fontSize = 18.sp,
+            color = MaterialTheme.colorScheme.onBackground // Text color adapts to theme
+        ),
         onTextLayout = { layoutResult ->
             textLayoutResult = layoutResult // Capture the layout result for offset calculations
         }, visualTransformation = {

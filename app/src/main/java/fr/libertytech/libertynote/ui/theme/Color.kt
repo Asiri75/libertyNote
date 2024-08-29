@@ -2,10 +2,13 @@ package fr.libertytech.libertynote.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+val CoralRed = Color(0xFFFF6F61)   // Primary color: Coral red
+val SoftPeach = Color(0xFFFEEAE6)  // Secondary color: Soft peach
+val LightBeige = Color(0xFFEDE7F6) // Tertiary color: Light beige
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+val DarkCoralRed = Color(0xFFD35C4F) // Darker variant for dark mode
+val DarkSoftPeach = Color(0xFFBDB3B1) // Darker variant for dark mode
+val DarkLightBeige = Color(0xFFB39DDB) // Darker variant for dark mode
+
+val White = Color(0xFFFFFFFF)         // Text color for dark mode
+val DarkGrey = Color(0xFF333333)      // Text color for light mode
