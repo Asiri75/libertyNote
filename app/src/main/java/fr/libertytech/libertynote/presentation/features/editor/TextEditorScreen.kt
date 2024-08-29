@@ -3,15 +3,16 @@ package fr.libertytech.libertynote.presentation.features.editor
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.webkit.URLUtil
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,43 +28,65 @@ import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun TextEditorScreen() {
+fun TextEditorScreen(viewModel: TextEditorViewModel = viewModel()) {
     // State management for the text and mode
-    var textState by remember { mutableStateOf(TextFieldValue("This is a sample text with a link https://www.example.com and some more text.")) }
+    val noteTitleState by viewModel.noteTitleState.collectAsState()
+    val noteState by viewModel.noteState.collectAsState()
+    var noteTextFieldState by remember { mutableStateOf(TextFieldValue(noteState)) }
     var isViewMode by remember { mutableStateOf(true) }
-
     val context = LocalContext.current
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    LaunchedEffect(Unit) {
+        viewModel.loadNote(context)
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp) // Adjust padding as needed
+    ) {
+        // Note title
+        NoteTitle(
+            noteTitle = noteTitleState,
+            onTextChange = {
+                viewModel.saveNoteTitle(context, it)
+            }
+        )
+
+        // The text editor screen with no shadow and full width
         if (isViewMode) {
             ViewingMode(
-                text = textState.text,
+                text = noteTextFieldState.text,
                 onLinkClick = { link ->
                     openLink(context, link)
                 },
                 onTextClick = { offset ->
-                    textState = textState.copy(selection = TextRange(offset))
+                    noteTextFieldState = noteTextFieldState.copy(selection = TextRange(offset))
                     isViewMode = false
                 }
             )
         } else {
             EditingMode(
-                textFieldValue = textState,
+                textFieldValue = noteTextFieldState,
                 onLinkClick = { link ->
                     openLink(context, link)
                     isViewMode = true
                 },
                 onTextChange = {
-                    textState = it
+                    viewModel.saveNoteText(context, it.text)
+                    noteTextFieldState = it
                 }
             )
         }
@@ -176,7 +199,6 @@ fun createAnnotatedText(linkColor: Color, text: String): AnnotatedString {
         // Regex to match URLs with or without "http"/"https"
         val urlPattern = "(https?://|http://)?[\\w-]+(\\.[\\w-]+)+(/\\S*)?".toRegex()
         val matches = urlPattern.findAll(text)
-
         var lastIndex = 0
         for (match in matches) {
             // Add the text before the link
