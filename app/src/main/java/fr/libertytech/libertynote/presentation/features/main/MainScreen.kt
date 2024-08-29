@@ -16,8 +16,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import fr.libertytech.libertynote.presentation.features.editor.TextEditor
+import fr.libertytech.libertynote.R
+import fr.libertytech.libertynote.presentation.features.editor.TextEditorScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,7 +27,7 @@ fun MainScreen() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Text Editor") }
+                title = { Text(text = stringResource(id = R.string.text_editor_title)) }
             )
         },
         content = { padding ->
@@ -39,7 +41,7 @@ fun MainScreen() {
             ) {
                 // Title
                 Text(
-                    text = "Your Notes",
+                    text = stringResource(id = R.string.your_notes_title),
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
@@ -53,7 +55,7 @@ fun MainScreen() {
                     elevation = CardDefaults.elevatedCardElevation(4.dp)
                 ) {
                     Box(modifier = Modifier.padding(8.dp)) {
-                        TextEditor()
+                        TextEditorScreen()
                     }
                 }
             }
